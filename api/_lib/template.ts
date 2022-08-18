@@ -26,7 +26,7 @@ function getCss(theme: Theme, fontSize: string) {
             foreground = 'white';
             break;
         case 'night':
-            background = '#0d1117';
+            background = '#051527';
             foreground = 'white';
             break;
     }
