@@ -25,6 +25,10 @@ function getCss(theme: Theme, fontSize: string) {
             background = '#111315';
             foreground = 'white';
             break;
+        case 'night':
+            background = '#0d1117';
+            foreground = 'white';
+            break;
     }
 
     return `
