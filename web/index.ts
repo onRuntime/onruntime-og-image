@@ -153,7 +153,7 @@ const imageLightOptions: DropdownOption[] = [
 const imageDarkOptions: DropdownOption[] = [
 
     { text: 'onRuntime', value: 'https://onruntime.com/static/images/logo/onruntime.svg' },
-    { text: 'Next.js', value: 'https://assets.vercel.com/image/upload/front/assets/design/nextjs-white-logo.svg' },
+    { text: 'Tonight Pass', value: 'https://tonightpass.com/static/images/logo/tonightpass.svg' },
     { text: 'Expat Facilities', value: 'https://expatfacilities.co/static/images/logo/logo.svg' },
 ];
 
