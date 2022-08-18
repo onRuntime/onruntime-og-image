@@ -58,7 +58,9 @@ function getDefaultImages(images: string[], theme: Theme): string[] {
     if (!images || !images[0]) {
         return [defaultImage];
     }
-    if (!images[0].startsWith('https://onruntime.com/static/images/') && !images[0].startsWith('https://tonightpass.com/static/')) {
+    if (!images[0].startsWith('https://onruntime.com/static/images/')
+        && !images[0].startsWith('https://tonightpass.com/static/images/')
+        && !images[0].startsWith('https://expatfacilities.co/static/images/')) {
         images[0] = defaultImage;
     }
     return images;
