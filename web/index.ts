@@ -126,6 +126,8 @@ const Toast = ({ show, message }: ToastProps) => {
 const themeOptions: DropdownOption[] = [
     { text: 'Light', value: 'light' },
     { text: 'Dark', value: 'dark' },
+    { text: 'Black', value: 'black' },
+    { text: 'Expat Facilities', value: 'expat' },
 ];
 
 const fileTypeOptions: DropdownOption[] = [
