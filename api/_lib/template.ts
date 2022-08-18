@@ -1,42 +1,35 @@
-
 import { readFileSync } from 'fs';
 import { marked } from 'marked';
 import { sanitizeHtml } from './sanitizer';
-import { ParsedRequest } from './types';
+import { ParsedRequest, Theme } from './types';
 const twemoji = require('twemoji');
 const twOptions = { folder: 'svg', ext: '.svg' };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../_fonts/Poppins-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/Poppins-Bold.woff2`).toString('base64');
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
-function getCss(theme: string, fontSize: string) {
+function getCss(theme: Theme, fontSize: string) {
     let background = 'white';
     let foreground = 'black';
 
-    if (theme === 'dark') {
-        background = 'black';
-        foreground = 'white';
+    switch (theme) {
+        case 'black':
+            background = 'black';
+            foreground = 'white';
+            break;
+        case 'dark':
+            background = '#1e1f20';
+            foreground = 'white';
+            break;
+        case 'expat':
+            background = '#111315';
+            foreground = 'white';
+            break;
     }
+
     return `
-    @font-face {
-        font-family: 'Poppins';
-        font-style:  normal;
-        font-weight: normal;
-        font-display: swap;
-        src: url(data:font/woff2;charset=utf-8;base64,${rglr}) format('woff2');
-        unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
-    }
-
-    @font-face {
-        font-family: 'Poppins';
-        font-style:  normal;
-        font-weight: bold;
-        src: url(data:font/woff2;charset=utf-8;base64,${bold}) format('woff2');
-        unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;    
-    }
-
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    
     @font-face {
         font-family: 'Vera';
         font-style: normal;
