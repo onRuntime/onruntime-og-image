@@ -187,7 +187,8 @@ const App = (_: any, state: AppState, setState: SetState) => {
         fontSize = '100px',
         theme = 'light',
         md = true,
-        text = '**Hello** World',
+        title = 'onRuntime Studio',
+        description = 'Enjoy this tool from **onRuntime Studio**!',
         images=[imageLightOptions[0].value],
         widths=[],
         heights=[],
@@ -201,7 +202,8 @@ const App = (_: any, state: AppState, setState: SetState) => {
     const mdValue = md ? '1' : '0';
     const imageOptions = theme === 'light' ? imageLightOptions : imageDarkOptions;
     const url = new URL(window.location.origin);
-    url.pathname = `${encodeURIComponent(text)}.${fileType}`;
+    url.pathname = `${encodeURIComponent(title)}.${fileType}`;
+    url.searchParams.append('description', encodeURIComponent(description));
     url.searchParams.append('theme', theme);
     url.searchParams.append('md', mdValue);
     url.searchParams.append('fontSize', fontSize);
@@ -258,12 +260,22 @@ const App = (_: any, state: AppState, setState: SetState) => {
                     })
                 }),
                 H(Field, {
-                    label: 'Text Input',
+                    label: 'Title Input',
                     input: H(TextInput, {
-                        value: text,
+                        value: title,
                         oninput: (val: string) => {
                             console.log('oninput ' + val);
-                            setLoadingState({ text: val, overrideUrl: url });
+                            setLoadingState({ title: val, overrideUrl: url });
+                        }
+                    })
+                }),
+                H(Field, {
+                    label: 'Description Input',
+                    input: H(TextInput, {
+                        value: description,
+                        oninput: (val: string) => {
+                            console.log('oninput ' + val, url);
+                            setLoadingState({ description: val, overrideUrl: url });
                         }
                     })
                 }),
