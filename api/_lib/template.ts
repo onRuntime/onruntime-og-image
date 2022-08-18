@@ -7,33 +7,34 @@ const twemoji = require('twemoji');
 const twOptions = { folder: 'svg', ext: '.svg' };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
+const rglr = readFileSync(`${__dirname}/../_fonts/Poppins-Regular.woff2`).toString('base64');
+const bold = readFileSync(`${__dirname}/../_fonts/Poppins-Bold.woff2`).toString('base64');
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
 function getCss(theme: string, fontSize: string) {
     let background = 'white';
     let foreground = 'black';
-    let radial = 'lightgray';
 
     if (theme === 'dark') {
         background = 'black';
         foreground = 'white';
-        radial = 'dimgray';
     }
     return `
     @font-face {
-        font-family: 'Inter';
+        font-family: 'Poppins';
         font-style:  normal;
         font-weight: normal;
+        font-display: swap;
         src: url(data:font/woff2;charset=utf-8;base64,${rglr}) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
     }
 
     @font-face {
-        font-family: 'Inter';
+        font-family: 'Poppins';
         font-style:  normal;
         font-weight: bold;
         src: url(data:font/woff2;charset=utf-8;base64,${bold}) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;    
     }
 
     @font-face {
@@ -41,17 +42,26 @@ function getCss(theme: string, fontSize: string) {
         font-style: normal;
         font-weight: normal;
         src: url(data:font/woff2;charset=utf-8;base64,${mono})  format("woff2");
-      }
+    }
+
+    html, body, p, h1 {
+        margin: 0;
+    }
 
     body {
         background: ${background};
-        background-image: radial-gradient(circle at 25px 25px, ${radial} 2%, transparent 0%), radial-gradient(circle at 75px 75px, ${radial} 2%, transparent 0%);
-        background-size: 100px 100px;
         height: 100vh;
         display: flex;
-        text-align: center;
-        align-items: center;
+        flex-direction: column;
+        font-family: 'Poppins', sans-serif;
+        padding: 0 10%;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
         justify-content: center;
+        flex: 1;
     }
 
     code {
@@ -65,26 +75,35 @@ function getCss(theme: string, fontSize: string) {
         content: '\`';
     }
 
+    .footer {
+        height: 150px;
+        display: flex;
+        align-items: flex-start;
+    }
+
     .logo-wrapper {
         display: flex;
         align-items: center;
-        align-content: center;
-        justify-content: center;
-        justify-items: center;
     }
 
     .logo {
-        margin: 0 75px;
+        margin: 0 25px;
+        width: auto;
+        height: 50px;
+        object-fit: contain;
+    }
+
+    .logo:first-child {
+        margin-left: 0;
+    }
+
+    .logo:last-child {
+        margin-right: 0;
     }
 
     .plus {
         color: #BBB;
-        font-family: Times New Roman, Verdana;
-        font-size: 100px;
-    }
-
-    .spacer {
-        margin: 150px;
+        font-size: 20px;
     }
 
     .emoji {
@@ -94,17 +113,21 @@ function getCss(theme: string, fontSize: string) {
         vertical-align: -0.1em;
     }
     
-    .heading {
-        font-family: 'Inter', sans-serif;
+    .title {
         font-size: ${sanitizeHtml(fontSize)};
-        font-style: normal;
+        font-weight: bold;
         color: ${foreground};
-        line-height: 1.8;
+    }
+    
+    .description {
+        margin-top: 10px;
+        font-size: calc(${sanitizeHtml(fontSize)} / 3);
+        color: #999999;
     }`;
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-    const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
+    const { title, description, theme, md, fontSize, images, widths, heights } = parsedReq;
     return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
@@ -114,24 +137,25 @@ export function getHtml(parsedReq: ParsedRequest) {
         ${getCss(theme, fontSize)}
     </style>
     <body>
-        <div>
-            <div class="spacer">
+        <div class="container">
+            <h1 class="title">${emojify(sanitizeHtml(title))}</h1>
+            <div class="description">${emojify(
+                md ? marked(description) : sanitizeHtml(description)
+            )}</div>
+        </div>
+
+        <footer class="footer">
             <div class="logo-wrapper">
                 ${images.map((img, i) =>
                     getPlusSign(i) + getImage(img, widths[i], heights[i])
                 ).join('')}
             </div>
-            <div class="spacer">
-            <div class="heading">${emojify(
-                md ? marked(text) : sanitizeHtml(text)
-            )}
-            </div>
-        </div>
+        </footer>
     </body>
 </html>`;
 }
 
-function getImage(src: string, width ='auto', height = '225') {
+function getImage(src: string, width ='auto', height = '50') {
     return `<img
         class="logo"
         alt="Generated Image"
