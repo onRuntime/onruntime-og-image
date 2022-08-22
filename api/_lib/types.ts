@@ -5,6 +5,7 @@ export interface ParsedRequest {
     fileType: FileType;
     title: string;
     description: string;
+    thumbnail: string;
     theme: Theme;
     md: boolean;
     fontSize: string;

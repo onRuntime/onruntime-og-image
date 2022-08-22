@@ -192,6 +192,7 @@ const App = (_: any, state: AppState, setState: SetState) => {
         md = true,
         title = 'onRuntime Studio',
         description = 'Enjoy this tool from **onRuntime Studio**!',
+        thumbnail = 'https://picsum.photos/1920/1080',
         images=[imageLightOptions[0].value],
         widths=[],
         heights=[],
@@ -207,6 +208,7 @@ const App = (_: any, state: AppState, setState: SetState) => {
     const url = new URL(window.location.origin);
     url.pathname = `${encodeURIComponent(title)}.${fileType}`;
     url.searchParams.append('description', encodeURIComponent(description));
+    url.searchParams.append('thumbnail', thumbnail);
     url.searchParams.append('theme', theme);
     url.searchParams.append('md', mdValue);
     url.searchParams.append('fontSize', fontSize);
@@ -279,6 +281,16 @@ const App = (_: any, state: AppState, setState: SetState) => {
                         oninput: (val: string) => {
                             console.log('oninput ' + val, url);
                             setLoadingState({ description: val, overrideUrl: url });
+                        }
+                    })
+                }),
+                H(Field, {
+                    label: 'Thumbnail Input',
+                    input: H(TextInput, {
+                        value: thumbnail,
+                        oninput: (val: string) => {
+                            console.log('oninput ' + val, url);
+                            setLoadingState({ thumbnail: val, overrideUrl: url });
                         }
                     })
                 }),

@@ -8,7 +8,7 @@ const emojify = (text: string) => twemoji.parse(text, twOptions);
 
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
-function getCss(theme: Theme, fontSize: string) {
+function getCss(theme: Theme, fontSize: string, thumbnail?: string) {
     let background = 'white';
     let foreground = 'black';
 
@@ -31,6 +31,8 @@ function getCss(theme: Theme, fontSize: string) {
             break;
     }
 
+    if(thumbnail) background = `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${background} 100%), url(${thumbnail});`;
+
     return `
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
     
@@ -47,6 +49,9 @@ function getCss(theme: Theme, fontSize: string) {
 
     body {
         background: ${background};
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         height: 100vh;
         display: flex;
         flex-direction: column;
@@ -124,14 +129,14 @@ function getCss(theme: Theme, fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-    const { title, description, theme, md, fontSize, images, widths, heights } = parsedReq;
+    const { title, description, thumbnail, theme, md, fontSize, images, widths, heights } = parsedReq;
     return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
     <title>Generated Image</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        ${getCss(theme, fontSize)}
+        ${getCss(theme, fontSize, thumbnail)}
     </style>
     <body>
         <div class="container">
